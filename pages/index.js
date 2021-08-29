@@ -30,8 +30,8 @@ export default function Home({ exploreData, cardsData }) {
       {loading ? (
         <Loader
           type="Watch"
-          height={40}
-          width={40}
+          height={38}
+          width={38}
           className="flex items-center justify-center h-screen"
           color="#FE595E"
         />
