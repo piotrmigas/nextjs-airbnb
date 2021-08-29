@@ -12,10 +12,9 @@ import Footer from "../components/Footer";
 import db from "../firebase";
 
 export default function Home({ exploreData, cardsData }) {
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    setLoading(true);
     setTimeout(() => {
       setLoading(false);
     }, 1500);
