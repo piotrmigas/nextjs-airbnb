@@ -1,4 +1,4 @@
-import { createContext, useContext, useReducer } from "react";
+import { ReactNode, createContext, useContext, useReducer } from 'react';
 
 const StateContext = createContext({
   searchResults: [],
@@ -9,24 +9,24 @@ const DispatchContext = createContext(null);
 
 const reducer = (state, { type, payload }) => {
   switch (type) {
-    case "GET_RESULTS":
+    case 'GET_RESULTS':
       return {
         ...state,
         searchResults: payload,
       };
-    case "LIKE":
+    case 'LIKE':
       return {
         ...state,
         searchResults: state.searchResults.map((result) =>
           result.id === payload ? { ...result, liked: !result.liked } : result
         ),
       };
-    case "BOOK":
+    case 'BOOK':
       return {
         ...state,
         items: [...state.items, payload],
       };
-    case "CANCEL":
+    case 'CANCEL':
       return {
         ...state,
         items: state.items.filter((item) => item.id !== payload),
@@ -36,13 +36,13 @@ const reducer = (state, { type, payload }) => {
   }
 };
 
-export const Provider = ({ children }) => {
+export const Provider = ({ children }: { children: ReactNode }) => {
   const [state, defaultDispatch] = useReducer(reducer, {
     searchResults: [],
     items: [],
   });
 
-  const dispatch = (type, payload) => defaultDispatch({ type, payload });
+  const dispatch = (type: string, payload: any) => defaultDispatch({ type, payload });
 
   return (
     <StateContext.Provider value={state}>
