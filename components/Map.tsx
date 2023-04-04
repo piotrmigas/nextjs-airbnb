@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import ReactMapGL, { Marker, Popup } from 'react-map-gl';
 import { getCenter } from 'geolib';
 import Image from 'next/image';
@@ -6,24 +6,34 @@ import { HeartIcon as HeartOutline } from '@heroicons/react/outline';
 import { HeartIcon as HeartSolid, StarIcon } from '@heroicons/react/solid';
 import { useDispatch } from '../context';
 
-const Map = ({ searchResults }) => {
+type SearchResult = {
+  id: string;
+  img: string;
+  location: string;
+  title: string;
+  description: string;
+  star: number;
+  price: string;
+  total: string;
+  long: number;
+  lat: number;
+  liked: boolean;
+};
+
+const Map = ({ searchResults }: { searchResults: SearchResult[] }) => {
   const dispatch = useDispatch();
 
-  const [selectedLocation, setSelectedLocation] = useState<any>({});
+  const [selectedLocation, setSelectedLocation] = useState<SearchResult | null>(null);
 
   const coordinates = searchResults.map((result) => ({ longitude: result.long, latitude: result.lat }));
 
-  const [center, setCenter] = useState<any>();
-
-  useEffect(() => {
-    setCenter(getCenter(coordinates));
-  }, [coordinates]);
+  const center = getCenter(coordinates);
 
   const [viewport, setViewport] = useState({
     width: '100%',
-    height: '100%',
-    latitude: center.latitude,
-    longitude: center.longitude,
+    height: '26%',
+    latitude: center && center.latitude,
+    longitude: center && center.longitude,
     zoom: 11,
   });
 
@@ -34,7 +44,7 @@ const Map = ({ searchResults }) => {
       {...viewport}
       onViewportChange={(nextViewport) => setViewport(nextViewport)}
     >
-      {searchResults.map((result) => (
+      {searchResults?.map((result) => (
         <div key={result.long}>
           <Marker longitude={result.long} latitude={result.lat} offsetLeft={-20} offsetTop={-10}>
             <p
@@ -46,11 +56,11 @@ const Map = ({ searchResults }) => {
               📌
             </p>
           </Marker>
-          {selectedLocation.long === result.long ? (
+          {selectedLocation?.long === result.long ? (
             <Popup
               className='z-30'
-              closeButton={false}
-              onClose={() => setSelectedLocation({})}
+              closeButton={true}
+              onClose={() => setSelectedLocation(null)}
               latitude={result.lat}
               longitude={result.long}
               closeOnClick={false}

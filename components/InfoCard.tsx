@@ -9,9 +9,9 @@ type InfoCardProps = {
   img: string;
   location: string;
   title: string;
-  star: boolean;
+  star: number;
   total: number;
-  liked: number;
+  liked: boolean;
   price: number;
   createCheckoutSession: () => void;
   description: string;

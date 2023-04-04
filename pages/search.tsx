@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import axios from 'axios';
 import { loadStripe } from '@stripe/stripe-js';
@@ -21,15 +21,16 @@ const Search = () => {
   const router = useRouter();
   const { location, startDate, endDate, numberOfGuests } = router.query;
   const dispatch = useDispatch();
+  const { searchResults, items } = useContextState();
 
   useEffect(() => {
     const fetchResults = async () => {
-      const res = await db.collection('searchResults').get();
-      const data = [];
-      for (const doc of res.docs) {
-        data.push({ ...doc.data(), id: doc.id, liked: false });
-      }
-      dispatch('GET_RESULTS', data);
+      const res = await db
+        .collection('searchResults')
+        .get()
+        .then((snap) => snap.docs.map((doc) => ({ ...doc.data(), id: doc.id, liked: false })));
+
+      dispatch('GET_RESULTS', res);
     };
     fetchResults();
   }, []);
@@ -37,8 +38,6 @@ const Search = () => {
   const formattedStartDate = dayjs(startDate as string).format('DD MMMM YY');
   const formattedEndDate = dayjs(endDate as string).format('DD MMMM YY');
   const range = `${formattedStartDate} - ${formattedEndDate}`;
-
-  const { searchResults, items } = useContextState();
 
   const createCheckoutSession = async () => {
     const stripe = await stripePromise;
