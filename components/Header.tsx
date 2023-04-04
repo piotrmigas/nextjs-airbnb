@@ -28,7 +28,7 @@ const Header = ({ placeholder }: HeaderProps) => {
     key: 'selection',
   };
 
-  const handleSelect = (ranges: any) => {
+  const handleSelect = (ranges) => {
     setStartDate(ranges.selection.startDate);
     setEndDate(ranges.selection.endDate);
   };
@@ -71,11 +71,11 @@ const Header = ({ placeholder }: HeaderProps) => {
 
   return (
     <header
-      className={`sticky top-0 z-40 grid grid-cols-2 sm:grid-cols-3 md:px-10 transition duration-300 ease-in-out bg-white shadow-md ${
-        !scroll && router.pathname === '/' && 'bg-transparent shadow-none'
-      } p-5`}
+      className={`sticky top-0 z-40 grid grid-cols-2 sm:grid-cols-3 md:px-10 transition duration-300 ease-in-out bg-white shadow-md p-5 ${
+        !scroll && router.pathname === '/' && 'bg-opacity-0 shadow-none'
+      }`}
     >
-      <div className='relative flex items-center h-10 cursor-pointer my-auto'>
+      <div className='relative flex items-center h-10 cursor-pointer my-auto w-32'>
         <Image
           src='/img/logo.png'
           layout='fill'
